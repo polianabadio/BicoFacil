@@ -43,4 +43,7 @@ public interface AvaliacaoDao {
 
     @Query("SELECT * FROM avaliacao WHERE id = :avaliacaoId")
     Avaliacao obterAvaliacaoPorId(int avaliacaoId);
+
+    @Query("SELECT COUNT(*) FROM avaliacao WHERE publicacaoId = :publicacaoId AND usuarioId = :usuarioId")
+    int contarAvaliacoesPorPublicacaoEUsuario(int publicacaoId, int usuarioId);
 }

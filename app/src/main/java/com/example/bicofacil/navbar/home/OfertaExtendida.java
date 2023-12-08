@@ -213,6 +213,23 @@ public class OfertaExtendida extends Fragment implements View.OnClickListener {
             }
         });
 
+        mViewModel.getJaFoiAvaliado().observe(getViewLifecycleOwner(), avaliado -> {
+            if(avaliado){
+                Toast.makeText(getActivity(), "Você já avaliou essa oferta!",
+                        Toast.LENGTH_SHORT).show();
+            }else{
+                Bundle bundle = new Bundle();
+                bundle.putInt("idPublicacao",idPulicacao);
+                bundle.putString("chave", chaveLista);
+                FragmentAvaliacao fragmentAvaliacao = new FragmentAvaliacao();
+                fragmentAvaliacao.setArguments(bundle);
+                FragmentTransaction transaction = getParentFragmentManager().beginTransaction();
+                transaction.replace(R.id.fragmentContainerView, fragmentAvaliacao);
+                transaction.addToBackStack(null);
+                transaction.commit();
+            }
+        });
+
     }
 
     @Override
@@ -225,15 +242,8 @@ public class OfertaExtendida extends Fragment implements View.OnClickListener {
     public void onClick(View v) {
         if(v==btnAvaliar){
             if(usuarioViewModel.getLogin().getValue()==true){
-                Bundle bundle = new Bundle();
-                bundle.putInt("idPublicacao",idPulicacao);
-                bundle.putString("chave", chaveLista);
-                FragmentAvaliacao fragmentAvaliacao = new FragmentAvaliacao();
-                fragmentAvaliacao.setArguments(bundle);
-                FragmentTransaction transaction = getParentFragmentManager().beginTransaction();
-                transaction.replace(R.id.fragmentContainerView, fragmentAvaliacao);
-                transaction.addToBackStack(null);
-                transaction.commit();
+                mViewModel.verificarSeUsuarioJaAvaliouPublicacao(usuarioViewModel.getId().getValue(),
+                        idPulicacao);
             } else{
                 Toast.makeText(getActivity(), "É preciso estar logado para avaliar!",
                         Toast.LENGTH_SHORT).show();

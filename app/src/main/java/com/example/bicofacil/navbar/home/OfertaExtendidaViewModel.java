@@ -28,6 +28,10 @@ public class OfertaExtendidaViewModel extends ViewModel {
     public LiveData<Boolean> getFimDelet() {
         return fimDelet;
     }
+    private MutableLiveData<Boolean> jaFoiAvaliado;
+    public LiveData<Boolean> getJaFoiAvaliado() {
+        return jaFoiAvaliado;
+    }
     private MutableLiveData<List<Avaliacao>> listaAvaliacoes;
     public LiveData<List<Avaliacao>> getListaAvaliacoes() {
         return listaAvaliacoes;
@@ -43,6 +47,7 @@ public class OfertaExtendidaViewModel extends ViewModel {
         this.publicacao = new MutableLiveData<>();
         this.listaAvaliacoes = new MutableLiveData<>();
         this.fimDelet = new MutableLiveData<>();
+        this.jaFoiAvaliado = new MutableLiveData<>();
     }
 
     public void buscarDadosPublicacao(int idPublicacao){
@@ -78,6 +83,18 @@ public class OfertaExtendidaViewModel extends ViewModel {
         new Thread(() -> {
             avaliacaoDao.deletarAvaliacaoPorId(idAvaliacao);
             buscarListaAvaliacoes(idPublicacao);
+        }).start();
+    }
+
+    public void verificarSeUsuarioJaAvaliouPublicacao(int idUsuario, int idPublicacao){
+        new Thread(() -> {
+
+        int numeroDeAvaliacoes = avaliacaoDao.contarAvaliacoesPorPublicacaoEUsuario(idPublicacao,idUsuario);
+        if(numeroDeAvaliacoes>0){
+            jaFoiAvaliado.postValue(true);
+        }else{
+            jaFoiAvaliado.postValue(false);
+        }
         }).start();
     }
 

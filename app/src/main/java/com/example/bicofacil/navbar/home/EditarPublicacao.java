@@ -160,7 +160,8 @@ public class EditarPublicacao extends Fragment implements View.OnClickListener{
         } else if (requestCode == PICK_IMAGE_FROM_GALLERY && resultCode == RESULT_OK) {
             Uri selectedImageUri = data.getData();
             try {
-                imageBitmap = MediaStore.Images.Media.getBitmap(getActivity().getContentResolver(), selectedImageUri);
+                imageBitmap = MediaStore.Images.Media.getBitmap(getActivity().getContentResolver(),
+                        selectedImageUri);
                 btnImagem.setImageBitmap(imageBitmap);
             } catch (IOException e) {
                 e.printStackTrace();
@@ -244,9 +245,4 @@ public class EditarPublicacao extends Fragment implements View.OnClickListener{
             }
         }
         }
-
-
-
-
-
     }
